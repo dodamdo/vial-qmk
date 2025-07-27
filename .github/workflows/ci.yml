@@ -76,16 +76,16 @@ jobs:
       with:
         persist-credentials: false
         submodules: recursive
-
+  
     - name: Build
       id: build
       run: |
         git config --global --add safe.directory $(pwd)
-        if ! qmk mass-compile -km "${KEYMAP}" -j $(nproc);
-          then
-          echo "::error::$(ls -1 .build/failed.log.* | wc -l) keymaps failed to build. See logs and/or job summary for details."
+        if ! qmk compile -kb silakka54 -km "${KEYMAP}"; then
+          echo "::error::Failed to build silakka54:${KEYMAP}"
           exit 1
         fi
+
 
     - name: Dump failure logs
       if: ${{ failure() && steps.build.conclusion == 'failure' }}
